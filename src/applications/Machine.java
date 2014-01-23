@@ -54,4 +54,24 @@ public class Machine {
 	public void setActiveJob(Job activeJob) {
 		this.activeJob = activeJob;
 	}
+	
+	public boolean isIdle() {
+		return jobQ.isEmpty();
+	}
+	
+	public void incrementNumTasks() {
+		numTasks++;
+	}
+	
+	public void putJob(Job job) {
+		jobQ.put(job);
+	}
+	
+	public void setActiveJobFromQueue() {
+		activeJob = (Job) jobQ.remove();
+	}
+	
+	public void setTotalWaitTime(int currentTime) {
+		totalWait = totalWait + currentTime - activeJob.getArrivalTime();
+	}
 }

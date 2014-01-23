@@ -61,5 +61,7 @@ public class Job {
 		this.id = id;
 	}
     
-   
+   public boolean hasNoTasks() {
+	   return taskQ.isEmpty();
+   }
 }

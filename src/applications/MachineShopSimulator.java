@@ -13,24 +13,6 @@ public class MachineShopSimulator {
     public static final String CHANGE_OVER_TIME_MUST_BE_AT_LEAST_0 = "change-over time must be >= 0";
     public static final String EACH_JOB_MUST_HAVE_AT_LEAST_1_TASK = "each job must have >= 1 task";
     public static final String BAD_MACHINE_NUMBER_OR_TASK_TIME = "bad machine number or task time";
-    
-    // top-level nested classes
-
-    /*private static class Machine {
-        // data members
-        LinkedQueue jobQ; // queue of waiting jobs for this machine
-        int changeTime; // machine change-over time
-        int totalWait; // total delay at this machine
-        int numTasks; // number of tasks processed on this machine
-        Job activeJob; // job currently active on this machine
-
-        // constructor
-        private Machine() {
-            jobQ = new LinkedQueue();
-        }
-    }*/
-
-
 
     // data members of MachineShopSimulator
     private static int timeNow; // current time
@@ -47,7 +29,7 @@ public class MachineShopSimulator {
      * @return false iff no next task
      */
     static boolean moveToNextMachine(Job theJob) {
-        if (theJob.getTaskQ().isEmpty()) {// no next task
+        if (theJob.hasNoTasks()) {// no next task
             System.out.println("Job " + theJob.getId() + " has completed at "
                     + timeNow + " Total wait was " + (timeNow - theJob.getLength()));
             return false;
@@ -55,7 +37,7 @@ public class MachineShopSimulator {
                 // get machine for next task
             int p = ((Task) theJob.getTaskQ().getFrontElement()).getMachine();
             // put on machine p's wait queue
-            machine[p].getJobQ().put(theJob);
+            machine[p].putJob(theJob);
             theJob.setArrivalTime(timeNow);
             // if p idle, schedule immediately
             if (eList.nextEventTime(p) == largeTime) {// machine is idle
@@ -73,24 +55,25 @@ public class MachineShopSimulator {
     static Job changeState(int theMachine) {// Task on theMachine has finished,
                                             // schedule next one.
         Job lastJob;
-        if (machine[theMachine].getActiveJob() == null) {// in idle or change-over
+        Machine currentMachine = machine[theMachine];
+		if (currentMachine.getActiveJob() == null) {// in idle or change-over
                                                     // state
             lastJob = null;
             // wait over, ready for new job
-            if (machine[theMachine].getJobQ().isEmpty()) // no waiting job
+            if (currentMachine.isIdle()) // no waiting job
                 eList.setFinishTime(theMachine, largeTime);
             else {// take job off the queue and work on it
-                machine[theMachine].setActiveJob((Job) machine[theMachine].getJobQ().remove());
-                machine[theMachine].setTotalWait(machine[theMachine].getTotalWait() + timeNow - machine[theMachine].getActiveJob().getArrivalTime());
-                machine[theMachine].setNumTasks(machine[theMachine].getNumTasks() + 1);
-                int t = machine[theMachine].activeJob.removeNextTask();
+                currentMachine.setActiveJobFromQueue();
+                currentMachine.setTotalWaitTime(timeNow);
+                currentMachine.incrementNumTasks();
+                int t = currentMachine.activeJob.removeNextTask();
                 eList.setFinishTime(theMachine, timeNow + t);
             }
         } else {// task has just finished on machine[theMachine]
                 // schedule change-over time
-            lastJob = machine[theMachine].getActiveJob();
-            machine[theMachine].setActiveJob(null);
-            eList.setFinishTime(theMachine, timeNow + machine[theMachine].getChangeTime());
+            lastJob = currentMachine.getActiveJob();
+            currentMachine.setActiveJob(null);
+            eList.setFinishTime(theMachine, timeNow + currentMachine.getChangeTime());
         }
 
         return lastJob;
