@@ -109,7 +109,6 @@ public class MachineShopSimulator {
 		}
 
 		// input the jobs
-		Job theJob;
 		for (int i = 0; i < numJobs; i++) {
 			System.out.println("Enter number of tasks for job " + (i + 1));
 			int tasks = keyboard.readInteger(); // number of tasks
@@ -118,7 +117,7 @@ public class MachineShopSimulator {
 				throw new MyInputException(EACH_JOB_MUST_HAVE_AT_LEAST_1_TASK);
 			}
 			// create the job
-			theJob = new Job(i+1); // TODO: isdum
+			Job theJob = new Job(i+1); // TODO: isdum
 			System.out.println("Enter the tasks (machine, time)"
 					+ " in process order");
 			for (int j = 0; j < tasks; j++) {// get tasks for job i
