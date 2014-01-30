@@ -4,23 +4,15 @@ import dataStructures.LinkedQueue;
 
 public class Machine {
 	// data members
-    LinkedQueue jobQ; // queue of waiting jobs for this machine
-    int changeTime; // machine change-over time
-    int totalWait; // total delay at this machine
-    int numTasks; // number of tasks processed on this machine
-    Job activeJob; // job currently active on this machine
+	LinkedQueue jobQ; // queue of waiting jobs for this machine
+	int changeTime; // machine change-over time
+	int totalWait; // total delay at this machine
+	int numTasks; // number of tasks processed on this machine
+	Job activeJob; // job currently active on this machine
 
-    // constructor
-    public Machine() {
-        jobQ = new LinkedQueue();
-    }
-
-	public LinkedQueue getJobQ() {
-		return jobQ;
-	}
-
-	public void setJobQ(LinkedQueue jobQ) {
-		this.jobQ = jobQ;
+	// constructor
+	public Machine() {
+		jobQ = new LinkedQueue();
 	}
 
 	public int getChangeTime() {
@@ -54,23 +46,27 @@ public class Machine {
 	public void setActiveJob(Job activeJob) {
 		this.activeJob = activeJob;
 	}
-	
+
 	public boolean isIdle() {
 		return jobQ.isEmpty();
 	}
-	
+
 	public void incrementNumTasks() {
 		numTasks++;
 	}
-	
+
 	public void putJob(Job job) {
 		jobQ.put(job);
 	}
-	
+
 	public void setActiveJobFromQueue() {
 		activeJob = (Job) jobQ.remove();
 	}
-	
+
+	public void addToJobQueue(Job job) {
+		jobQ.put(job);
+	}
+
 	public void setTotalWaitTime(int currentTime) {
 		totalWait = totalWait + currentTime - activeJob.getArrivalTime();
 	}
