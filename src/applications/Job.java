@@ -33,16 +33,8 @@ public class Job {
 		return taskQ;
 	}
 
-	public void setTaskQ(LinkedQueue taskQ) {
-		this.taskQ = taskQ;
-	}
-
 	public int getLength() {
 		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
 	}
 
 	public int getArrivalTime() {
@@ -55,10 +47,6 @@ public class Job {
 
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
     
    public boolean hasNoTasks() {
