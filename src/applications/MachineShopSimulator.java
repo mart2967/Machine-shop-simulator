@@ -3,7 +3,6 @@
 package applications;
 
 import utilities.MyInputStream;
-import dataStructures.LinkedQueue;
 import exceptions.MyInputException;
 
 public class MachineShopSimulator {
