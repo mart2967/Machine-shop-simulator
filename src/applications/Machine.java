@@ -55,9 +55,6 @@ public class Machine {
 		numTasks++;
 	}
 
-	public void putJob(Job job) {
-		jobQ.put(job);
-	}
 
 	public void setActiveJobFromQueue() {
 		activeJob = (Job) jobQ.remove();

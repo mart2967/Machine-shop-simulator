@@ -15,12 +15,12 @@ public class EventList {
 
 		if (theNumMachines < 1)
 			throw new IllegalArgumentException(MachineShopSimulator.NUMBER_OF_MACHINES_MUST_BE_AT_LEAST_1);
-		finishTime = new int[theNumMachines + 1];
+		finishTime = new int[theNumMachines]; // index fix
 
 		// all machines are idle, initialize with
 		// large finish time
-		for (int i = 1; i <= theNumMachines; i++) {
-			finishTime[i] = theLargeTime;
+		for (int i = 0; i < theNumMachines; i++) {
+			finishTime[i] = theLargeTime; //index fix
 		}
 	}
 
@@ -28,8 +28,8 @@ public class EventList {
 	public int nextEventMachine() {
 		// find first machine to finish, this is the
 		// machine with smallest finish time
-		int p = 1;
-		for (int i = 2; i < finishTime.length; i++) {
+		int p = 0; //index fix
+		for (int i = 1; i < finishTime.length; i++) {
 			if (finishTime[i] < finishTime[p]) {// i finishes earlier
 				p = i;
 			}

@@ -18,7 +18,7 @@ public class MachineShopSimulator {
     private static int numMachines; // number of machines
     private static int numJobs; // number of jobs
     private static EventList eList; // pointer to event list
-    private static Machine[] machine; // array of machines
+    private static Machine[] machines; // array of machines
     private static int largeTime; // all machines finish before this
 
     // methods
@@ -37,7 +37,7 @@ public class MachineShopSimulator {
         // get machine for next task
         int p = ((Task) theJob.getTaskQ().getFrontElement()).getMachine();
         // put on machine p's wait queue
-        machine[p].putJob(theJob);
+        machines[p].addToJobQueue(theJob);
         theJob.setArrivalTime(timeNow);
         // if p idle, schedule immediately
         if (eList.nextEventTime(p) == largeTime) {// machine is idle
@@ -54,7 +54,7 @@ public class MachineShopSimulator {
     static Job changeState(int theMachine) {// Task on theMachine has finished,
         // schedule next one.
         Job lastJob;
-        Machine currentMachine = machine[theMachine];
+        Machine currentMachine = machines[theMachine];
         if (currentMachine.getActiveJob() == null) {// in idle or change-over
             // state
             lastJob = null;
@@ -93,9 +93,9 @@ public class MachineShopSimulator {
         }
         // create event and machine queues
         eList = new EventList(numMachines, largeTime);
-        machine = new Machine[numMachines + 1];
+        machines = new Machine[numMachines + 1];
         for (int i = 0; i < numMachines; i++)
-            machine[i+1] = new Machine(); //TODO: dum
+            machines[i+1] = new Machine(); //TODO: dum
 
         // input the change-over times
         System.out.println("Enter change-over times for machines");
@@ -103,7 +103,7 @@ public class MachineShopSimulator {
             int ct = keyboard.readInteger();
             if (ct < 0)
                 throw new MyInputException(CHANGE_OVER_TIME_MUST_BE_AT_LEAST_0);
-            machine[j+1].setChangeTime(ct); //TODO: dum
+            machines[j+1].setChangeTime(ct); //TODO: dum
         }
 
         // input the jobs
@@ -129,7 +129,7 @@ public class MachineShopSimulator {
                 }
                 theJob.addTask(theMachine, theTaskTime); // add to
             } // task queue
-            machine[firstMachine].addToJobQueue(theJob);
+            machines[firstMachine].addToJobQueue(theJob);
         }
     }
 
@@ -159,9 +159,9 @@ public class MachineShopSimulator {
         System.out.println("Finish time = " + timeNow);
         for (int p = 1; p <= numMachines; p++) {
             System.out.println("Machine " + p + " completed "
-                    + machine[p].getNumTasks() + " tasks");
+                    + machines[p].getNumTasks() + " tasks");
             System.out.println("The total wait time was "
-                    + machine[p].getTotalWait());
+                    + machines[p].getTotalWait());
             System.out.println();
         }
     }
