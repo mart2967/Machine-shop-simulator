@@ -9,10 +9,20 @@ public class Machine {
     int totalWait; // total delay at this machine
     int numTasks; // number of tasks processed on this machine
     Job activeJob; // job currently active on this machine
+    int finishTime;
+    
+    public int getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(int finishTime) {
+        this.finishTime = finishTime;
+    }
 
     // constructor
     public Machine() {
         jobQ = new LinkedQueue();
+        this.finishTime = Integer.MAX_VALUE;
     }
 
     public int getChangeTime() {
